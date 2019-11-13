@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/Tilkeii/vote-alternatif/issues"
   },
-  "homepage": "https://github.com/Tilkeii/vote-alternatif#readme"
+  "homepage": "https://github.com/Tilkeii/vote-alternatif#readme",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^1.0.25"
+  }
 }
