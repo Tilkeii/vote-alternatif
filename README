@@ -1,0 +1,18 @@
+Use an ether faucet
+Make sure you have enough ether in your account to do the deployment. You can acquire ether on the Ropsten network through a service known as a faucet. While there are multiple faucet sites out there, one service we recommend is hosted by MetaMask.
+
+Navigate to MetaMask's Test Ether Faucet.
+
+Connect to the Ropsten Test Network using MetaMask.
+
+The faucet will link to your first account. Click "Request 1 Ether From Faucet" to submit your request.
+
+Within a short period of time, your account will be populated with the requested ether.
+
+We are now ready to deploy to Ropsten!
+
+-------
+
+Aller dans les parametres du compte sur metamask puis securité puis reveler les mots seed
+
+Copier ces mots dans un fichier .secret
