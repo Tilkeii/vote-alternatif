@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "directories": {
-    "test": "test"
+    "test": "test",
+    "compile": "truffle compile",
+    "migrate": "truffle migrate --network rospten"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,6 +21,7 @@
   },
   "homepage": "https://github.com/Tilkeii/vote-alternatif#readme",
   "dependencies": {
-    "@truffle/hdwallet-provider": "^1.0.25"
+    "@truffle/hdwallet-provider": "^1.0.25",
+    "truffle": "^5.1.1"
   }
 }
