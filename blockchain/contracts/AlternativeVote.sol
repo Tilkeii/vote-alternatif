@@ -49,7 +49,7 @@ contract AlternativeVote is Ownable {
 
     function closeVoteSession() public onlyOwner {
         currentPhase = Phase.CLOSED;
-        processvotersAddressMapping();
+        processVotersAddressMapping();
     }
 
     //calcule les résultats
@@ -66,24 +66,24 @@ contract AlternativeVote is Ownable {
     }
 
     /**
-        @param array
+        @param array of uint
         @return index of smaller int in array
      */
-    function smallest(uint[] array) returns(uint){
+    function smallest(uint[] memory array) public returns(uint){
         uint min = 0;
-        for (uint i=1; i<array.length-1; i++){
-            if(array[i] < array[min]) min = i; 
+        for (uint i = 1; i < array.length - 1; i++){
+            if(array[i] < array[min]) min = i;
         }
         return min;
     }
 
     /**
-        @param index
-        @param array
+        @param index of item to remove
+        @param array of items
         @return array without the element at the given index
      */
-    function remove(uint index, address[] memory array) internal returns(address[] memory) {
-        if (index >= array.length) return;
+    function remove(uint index, address[] storage array) internal returns(address[] memory) {
+        if (index >= array.length) return array;
 
         for (uint i = index; i < array.length - 1; i++){
             array[i] = array[i + 1];
@@ -97,11 +97,12 @@ contract AlternativeVote is Ownable {
         @param
         @return
      */
-    function setArrayForNextRound(uint[] memory array) internal returns(uint[] memory) {
+    function setArrayForNextRound(uint[] storage array) internal returns(uint[] memory) {
         for(uint i = 0; i < array.length - 1; i++){
             array[i] = 0;
         }
-        return array.length--;
+        array.length--;
+        return array;
     }
 
     /**
@@ -121,5 +122,9 @@ contract AlternativeVote is Ownable {
     modifier onlyOpenPhase() {
         require(currentPhase == Phase.OPEN, "Current phase is not Open");
         _;
+    }
+    
+    function getCandidatesList() public returns(address[] memory){
+        return candidatesList;
     }
 }
