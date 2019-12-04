@@ -52,6 +52,10 @@ contract AlternativeVote is Ownable {
         processVotersAddressMapping();
     }
 
+    function testConnexion() public returns(string memory){
+        return "bjr";
+    }
+
     //calcule les résultats
     function processVotersAddressMapping() internal {
         uint roundNumber = candidatesList.length;

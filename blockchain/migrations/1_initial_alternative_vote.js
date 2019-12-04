@@ -1,4 +1,4 @@
-const AlternativeVote = artifacts.require("AlternativeVote");
+const AlternativeVote = artifacts.require("../contracts/AlternativeVote.sol");
 
 module.exports = function(deployer) {
   deployer.deploy(AlternativeVote);
