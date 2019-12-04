@@ -52,12 +52,12 @@ contract AlternativeVote is Ownable {
         processVotersAddressMapping();
     }
 
-    function testConnexion() public returns(string memory){
+    function testConnexion() public pure returns(string memory){
         return "bjr";
     }
 
     //calcule les résultats
-    function processVotersAddressMapping() internal {
+    function processVotersAddressMapping() internal view {
         uint roundNumber = candidatesList.length;
         
         for(uint round = 0; round < roundNumber; round++) {
@@ -73,7 +73,7 @@ contract AlternativeVote is Ownable {
         @param array of uint
         @return index of smaller int in array
      */
-    function smallest(uint[] memory array) public returns(uint){
+    function smallest(uint[] memory array) public pure returns(uint){
         uint min = 0;
         for (uint i = 1; i < array.length - 1; i++){
             if(array[i] < array[min]) min = i;
@@ -128,7 +128,7 @@ contract AlternativeVote is Ownable {
         _;
     }
     
-    function getCandidatesList() public returns(address[] memory){
+    function getCandidatesList() public view returns(address[] memory){
         return candidatesList;
     }
 }
