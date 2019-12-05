@@ -6,6 +6,10 @@ import Web3 from 'web3';
 
 Vue.config.productionTip = false
 
+// https://medium.com/metamask/https-medium-com-metamask-breaking-change-injecting-web3-7722797916a8
+const ethereum = (window as any).ethereum;
+ethereum.enable();
+
 const web3 = new Web3(Web3.givenProvider);
 console.log('Web3', web3);
 console.log('givenProvider', Web3.givenProvider);
@@ -16,12 +20,16 @@ console.log('Address', contract_json.networks[3].address);
 const contract = new web3.eth.Contract(contract_json.abi, contract_json.networks[3].address);
 console.log('Contract', contract);
 
-web3.eth.getAccounts(console.log).then((result: any) => {
-    console.log('Get Account', result);
+web3.eth.getAccounts().then(result => {
+    console.log('getAccounts', result);
 });
 
 contract.methods.testConnexion().call().then((result: any) => {
-    console.log('Result', result);
+    console.log('Result testConnexion', result);
+});
+
+contract.methods.closeVoteSession().call().then((result: any) => {
+    console.log('Result closeVoteSession', result);
 });
 
 new Vue({
