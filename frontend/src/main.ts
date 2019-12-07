@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import store from './store/store'
 import vuetify from './plugins/vuetify';
 import Web3 from 'web3';
 
@@ -14,23 +14,25 @@ ethereum.enable();
 const web3 = new Web3(Web3.givenProvider);
 console.log('Web3', web3);
 console.log('givenProvider', Web3.givenProvider);
-
 const contract_json = require('../../blockchain/build/contracts/AlternativeVote.json');
 console.log('ABI', contract_json.abi);
 console.log('Address', contract_json.networks[3].address);
 const contract = new web3.eth.Contract(contract_json.abi, contract_json.networks[3].address);
 console.log('Contract', contract);
 
-contract.events.PhaseChange
+Vue.prototype.$web3 = web3;
+Vue.prototype.$contract = contract;
 
-web3.eth.getAccounts().then(result => {
-    console.log('getAccounts', result);
+// contract.events.PhaseChange
 
-    // contract.methods.testConnexion().call().then((result: any) => {
-    //     console.log('Result testConnexion', result);
-    // });
+// web3.eth.getAccounts().then(result => {
+//     console.log('getAccounts', result);
 
-});
+//     contract.methods.testConnexion().call().then((result: any) => {
+//         console.log('Result testConnexion', result);
+//     });
+
+// });
 
 new Vue({
   router,

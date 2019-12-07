@@ -1,7 +1,5 @@
 <template>
-    <v-row>
-        <h1>Vote</h1>
-    </v-row>
+
 </template>
 
 <script>
@@ -9,5 +7,5 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 
 @Component
-export default class Home extends Vue {}
+export default class PhaseOpen extends Vue {}
 </script>
