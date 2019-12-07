@@ -20,16 +20,15 @@ console.log('Address', contract_json.networks[3].address);
 const contract = new web3.eth.Contract(contract_json.abi, contract_json.networks[3].address);
 console.log('Contract', contract);
 
+contract.events.PhaseChange
+
 web3.eth.getAccounts().then(result => {
     console.log('getAccounts', result);
-});
 
-contract.methods.testConnexion().call().then((result: any) => {
-    console.log('Result testConnexion', result);
-});
+    // contract.methods.testConnexion().call().then((result: any) => {
+    //     console.log('Result testConnexion', result);
+    // });
 
-contract.methods.closeVoteSession().call().then((result: any) => {
-    console.log('Result closeVoteSession', result);
 });
 
 new Vue({
