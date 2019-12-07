@@ -7,10 +7,28 @@ import Web3 from 'web3';
 
 Vue.config.productionTip = false
 
-// https://medium.com/metamask/https-medium-com-metamask-breaking-change-injecting-web3-7722797916a8
+/**
+ * Connexion with metamask
+ */
 const ethereum = (window as any).ethereum;
-ethereum.enable();
+ethereum.enable().then((accounts: any) => {
+    store.commit('setMetamask', true);
+    store.commit('setAddress', accounts[0]);
+}).catch((error: any) => {
+    if(error.code === 4001)
+        console.warn('Please connect to MetaMask.')
+    else {
+        console.error(error);
+    }
+})
 
+ethereum.on('accountsChanged', function (accounts: any) {
+    store.commit('setAddress', accounts[0]);
+})
+
+/**
+ * Connexion with Web3
+ */
 const web3 = new Web3(Web3.givenProvider);
 console.log('Web3', web3);
 console.log('givenProvider', Web3.givenProvider);
@@ -20,19 +38,11 @@ console.log('Address', contract_json.networks[3].address);
 const contract = new web3.eth.Contract(contract_json.abi, contract_json.networks[3].address);
 console.log('Contract', contract);
 
+/**
+ * Vuejs global variable
+ */
 Vue.prototype.$web3 = web3;
 Vue.prototype.$contract = contract;
-
-// contract.events.PhaseChange
-
-// web3.eth.getAccounts().then(result => {
-//     console.log('getAccounts', result);
-
-//     contract.methods.testConnexion().call().then((result: any) => {
-//         console.log('Result testConnexion', result);
-//     });
-
-// });
 
 new Vue({
   router,

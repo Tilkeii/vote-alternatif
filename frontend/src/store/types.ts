@@ -1,4 +1,8 @@
 export interface IRootState {
     version: string;
-    metamaskEnabled: boolean;
+}
+
+export interface IMetamask {
+    enable: boolean;
+    address: string;
 }

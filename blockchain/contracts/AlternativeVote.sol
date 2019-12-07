@@ -124,6 +124,10 @@ contract AlternativeVote is Ownable {
         return _candidatesList;
     }
 
+    function getCurrentPhase() public view returns(Phase) {
+        return _currentPhase;
+    }
+
     /*********************
     *   PURE FUNCTIONS   *
     *********************/
