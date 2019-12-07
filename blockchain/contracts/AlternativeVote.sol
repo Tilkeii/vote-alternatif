@@ -51,7 +51,10 @@ contract AlternativeVote is Ownable {
         _currentPhase = Phase.REGISTER;
     }
 
-    function registerCandidate() public onlyRegisterPhase {
+    function registerCandidate() external onlyRegisterPhase {
+        for(uint i = 0; i < _candidatesList.length; i++) {
+            require(_candidatesList[i] == msg.sender, "User is already a candidate");
+        }
         _candidatesList.push(msg.sender);
         emit CandidateAdded(msg.sender);
     }
@@ -66,13 +69,13 @@ contract AlternativeVote is Ownable {
         _votersAddress.push(msg.sender);
     }
 
-    function closeVoteSession() public onlyOwner {
+    function closeVoteSession() external onlyOwner {
         _currentPhase = Phase.CLOSED;
         emit PhaseChange(_currentPhase);
         processVotersAddressMapping();
     }
 
-    function resetVoteToDefault() public onlyOwner {
+    function resetVoteToDefault() external onlyOwner {
         _currentPhase = Phase.REGISTER;
         for(uint i = 0; i < _votersAddress.length; i++) {
             delete _votersAddressMapping[_votersAddress[i]];
@@ -120,11 +123,11 @@ contract AlternativeVote is Ownable {
     *       GETTER       *
     *********************/
 
-    function getCandidatesList() public view returns(address[] memory){
+    function getCandidatesList() external view returns(address[] memory){
         return _candidatesList;
     }
 
-    function getCurrentPhase() public view returns(Phase) {
+    function getCurrentPhase() external view returns(Phase) {
         return _currentPhase;
     }
 

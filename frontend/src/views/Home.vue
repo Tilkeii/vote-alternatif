@@ -25,10 +25,20 @@ export default class Home extends Vue {
     @State("Metamask") metamask!: IMetamask;
 
     public created() {
-        this.getCurrentPhase();
+        setTimeout(this.getCurrentPhase, 1000)
     }
 
     public async getCurrentPhase() {
+        const registerCandidate = await this.$contract.methods
+            .registerCandidate()
+            .send({from: this.metamask.address});
+        console.log('registerCandidate', registerCandidate);
+
+        const getCandidatesList = await this.$contract.methods
+            .getCandidatesList()
+            .call({from: this.metamask.address});
+        console.log('getCandidatesList', getCandidatesList);
+
         const currentPhase = await this.$contract.methods
             .getCurrentPhase()
             .call({from: this.metamask.address});
