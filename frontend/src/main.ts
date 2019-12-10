@@ -1,30 +1,11 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
-import store from './store/store'
+// import router from './router'
+// import store from './store/store'
 import vuetify from './plugins/vuetify';
 import Web3 from 'web3';
 
 Vue.config.productionTip = false
-
-/**
- * Connexion with metamask
- */
-const ethereum = (window as any).ethereum;
-ethereum.enable().then((accounts: any) => {
-    store.commit('setMetamask', true);
-    store.commit('setAddress', accounts[0]);
-}).catch((error: any) => {
-    if(error.code === 4001)
-        console.warn('Please connect to MetaMask.')
-    else {
-        console.error(error);
-    }
-})
-
-ethereum.on('accountsChanged', function (accounts: any) {
-    store.commit('setAddress', accounts[0]);
-})
 
 /**
  * Connexion with Web3
@@ -45,8 +26,8 @@ Vue.prototype.$web3 = web3;
 Vue.prototype.$contract = contract;
 
 new Vue({
-  router,
-  store,
+//   router,
+//   store,
   vuetify,
   render: h => h(App)
 }).$mount('#app')
