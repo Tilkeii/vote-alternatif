@@ -42,6 +42,7 @@ contract AlternativeVote is Ownable {
     *********************/
     event PhaseChange(Phase newPhase);
     event CandidateAdded(address candidate);
+    event ResetVote();
 
     /*********************
     *      FUNCTIONS     *
@@ -69,23 +70,24 @@ contract AlternativeVote is Ownable {
         _votersAddress.push(msg.sender);
     }
 
-    function closeVoteSession() external onlyOwner {
-        _currentPhase = Phase.CLOSED;
+    function setCurrentPhase(uint newPhase) public onlyOwner {
+        _currentPhase = Phase(newPhase);
         emit PhaseChange(_currentPhase);
-        processVotersAddressMapping();
     }
 
     function resetVoteToDefault() external onlyOwner {
         _currentPhase = Phase.REGISTER;
+        emit PhaseChange(_currentPhase);
         for(uint i = 0; i < _votersAddress.length; i++) {
             delete _votersAddressMapping[_votersAddress[i]];
         }
         delete _candidatesList;
         delete _votersAddress;
+        emit ResetVote();
     }
 
     //calcule les résultats
-    function processVotersAddressMapping() internal {
+    function processVotersAddressMapping() public onlyOwner {
         uint roundNumber = _candidatesList.length - 1;
 
         for(uint round = 0; round < roundNumber; round++) {
