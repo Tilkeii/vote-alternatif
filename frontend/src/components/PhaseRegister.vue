@@ -19,7 +19,7 @@
         </v-row>
         <v-row justify="center">
             <v-col class="flex-grow-0">
-                <v-btn @click="registerCandidate" outlined class="mx-2">Register</v-btn>
+                <v-btn @click="registerCandidateContract" outlined class="mx-2">Register</v-btn>
             </v-col>
         </v-row>
     </div>
@@ -36,7 +36,7 @@ export default class PhaseRegister extends Vue {
     private candidatesList: Array<any> = [];
 
     public async created(): Promise<void> {
-        this.candidatesList = await this.getCandidatesList();
+        this.candidatesList = await this.getCandidatesListContract();
         console.debug("Candidates List : ", this.candidatesList);
 
         /**
@@ -62,13 +62,13 @@ export default class PhaseRegister extends Vue {
         });
     }
 
-    private async getCandidatesList() {
+    private async getCandidatesListContract() {
         return await this.$contract.methods
             .getCandidatesList()
             .call({ from: this.metamaskAddress });
     }
 
-    private async registerCandidate(): Promise<any> {
+    private async registerCandidateContract(): Promise<any> {
         return await this.$contract.methods
             .registerCandidate()
             .send({ from: this.metamaskAddress });

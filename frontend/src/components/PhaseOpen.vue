@@ -31,10 +31,10 @@ export default class PhaseOpen extends Vue {
     private candidatesList: Array<any> = []; 
 
     public async created(): Promise<void> {
-        this.candidatesList = await this.getCandidatesList();
+        this.candidatesList = await this.getCandidatesListContract();
     }
 
-    private async getCandidatesList() {
+    private async getCandidatesListContract() {
         return await this.$contract.methods
             .getCandidatesList()
             .call({ from: this.metamaskAddress });

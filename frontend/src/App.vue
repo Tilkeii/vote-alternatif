@@ -7,9 +7,9 @@
             <v-toolbar-title>Vote</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
-                <v-btn text @click="resetVoteToDefault" v-if="isOwner">Reset Vote</v-btn>
-                <v-btn text @click="setCurrentPhase" v-if="isOwner">Close Vote</v-btn>
-                <v-btn text v-if="isOwner">Get Winner</v-btn>
+                <v-btn text @click="resetVoteToDefaultContract" v-if="isOwnerProp">Reset Vote</v-btn>
+                <v-btn text @click="setCurrentPhaseContract" v-if="isOwnerProp">Close Vote</v-btn>
+                <v-btn text v-if="isOwnerProp">Get Winner</v-btn>
             </v-toolbar-items>
         </v-app-bar>
 
@@ -25,19 +25,19 @@
                         <MetamaskError v-if="!metamaskEnable"></MetamaskError>
                         <div v-else-if="loading">Loading...</div>
                         <PhaseRegister
+                            v-else-if="currentPhase == 0"
                             :metamaskAddress="metamaskAddress"
                             :isOwner="isOwnerProp"
-                            v-else-if="currentPhase == 0"
                         ></PhaseRegister>
                         <PhaseOpen
+                            v-else-if="currentPhase == 1"
                             :metamaskAddress="metamaskAddress"
                             :isOwner="isOwnerProp"
-                            v-else-if="currentPhase == 1"
                         ></PhaseOpen>
                         <PhaseClosed
+                            v-else-if="currentPhase == 2"
                             :metamaskAddress="metamaskAddress"
                             :isOwner="isOwnerProp"
-                            v-else-if="currentPhase == 2"
                         ></PhaseClosed>
                     </v-col>
                 </v-row>
@@ -67,11 +67,11 @@ import PhaseClosed from "@/components/PhaseClosed.vue";
     }
 })
 export default class App extends Vue {
-    public currentPhase: EPhase | undefined;
-    public loading: boolean = true;
-    public metamaskEnable: boolean = false;
-    public metamaskAddress: string = "";
-    public isOwnerProp: boolean = false;
+    private currentPhase: EPhase = EPhase.REGISTER;
+    private loading: boolean = true;
+    private metamaskEnable: boolean = false;
+    private metamaskAddress: string = "";
+    private isOwnerProp: boolean = false;
 
     public async created(): Promise<void> {
         this.loading = true;
@@ -81,9 +81,9 @@ export default class App extends Vue {
             this.metamaskAddress = accounts[0];
             console.debug("Current Address : ", this.metamaskAddress);
             this.metamaskEnable = true;
-            this.currentPhase = await this.getCurrentPhase();
+            this.currentPhase = Number(await this.getCurrentPhaseContract());
             console.debug("Current Phase : ", this.currentPhase);
-            this.isOwnerProp = await this.isOwner();
+            this.isOwnerProp = await this.isOwnerContract();
             console.debug("Is Owner : ", this.isOwnerProp);
             this.loading = false;
         } catch (error) {
@@ -102,51 +102,46 @@ export default class App extends Vue {
             this.metamaskAddress = accounts[0];
             if (accounts[0]) this.metamaskEnable = true;
             else this.metamaskEnable = false;
-            this.isOwnerProp = await this.isOwner();
+            this.isOwnerProp = await this.isOwnerContract();
             console.debug("Is Owner : ", this.isOwnerProp);
         });
 
         /**
          * Web3 event
          */
-        const these = this;
-        this.$contract.events.PhaseChange({}, function (error: any, event: any) {
+
+        this.$contract.events.PhaseChange({}, (error: any, event: any) => {
             if (!error) {
                 console.debug("Phase Change : ", event);
-                these.currentPhase = Number(event.returnValues.newPhase);
+                this.currentPhase = Number(event.returnValues.newPhase);
             } else {
                 console.error(error);
             }
         });
     }
 
-    public async getCurrentPhase(): Promise<any> {
+    private async getCurrentPhaseContract(): Promise<any> {
         return await this.$contract.methods
             .getCurrentPhase()
             .call({ from: this.metamaskAddress });
     }
 
-    public async isOwner(): Promise<any> {
+    private async isOwnerContract(): Promise<any> {
         return await this.$contract.methods
             .isOwner()
             .call({ from: this.metamaskAddress });
     }
 
-    public async resetVoteToDefault(): Promise<any> {
+    private async resetVoteToDefaultContract(): Promise<any> {
         return await this.$contract.methods
             .resetVoteToDefault()
             .send({ from: this.metamaskAddress });
     }
 
-    public async setCurrentPhase(): Promise<any> {
+    private async setCurrentPhaseContract(): Promise<any> {
         return await this.$contract.methods
             .setCurrentPhase(1)
             .send({ from: this.metamaskAddress });
-    }
-
-    @Watch("currentPhase")
-    onCurrentPhaseChanged(val: number, oldVal: number) {
-        console.log("OnCurrentPhaseChanged : ", val, oldVal);
     }
 }
 
