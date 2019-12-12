@@ -54,7 +54,7 @@ contract AlternativeVote is Ownable {
 
     function registerCandidate() external onlyRegisterPhase {
         for(uint i = 0; i < _candidatesList.length; i++) {
-            require(_candidatesList[i] == msg.sender, "User is already a candidate");
+            require(_candidatesList[i] != msg.sender, "User is already a candidate");
         }
         _candidatesList.push(msg.sender);
         emit CandidateAdded(msg.sender);
