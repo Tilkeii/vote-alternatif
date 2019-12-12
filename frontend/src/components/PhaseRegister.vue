@@ -73,10 +73,5 @@ export default class PhaseRegister extends Vue {
             .registerCandidate()
             .send({ from: this.metamaskAddress });
     }
-
-    @Watch("candidatesList")
-    onCandidatesListChanged(val: any, newVal: any) {
-        console.log("OnCandidatesListChanged", val, newVal);
-    }
 }
 </script>

@@ -103,7 +103,7 @@ export default class App extends Vue {
             if (accounts[0]) this.metamaskEnable = true;
             else this.metamaskEnable = false;
             this.isOwnerProp = await this.isOwnerContract();
-            console.debug("Is Owner : ", this.isOwnerProp);
+            console.debug("New address", this.metamaskAddress, " ; Is Owner : ", this.isOwnerProp);
         });
 
         /**
