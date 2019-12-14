@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="loading">
         <h1>PhaseClosed</h1>
     </div>
 </template>
@@ -12,6 +12,7 @@ import { Component, Prop } from "vue-property-decorator";
 export default class PhaseClosed extends Vue {
     @Prop() metamaskAddress!: string;
     @Prop() isOwner!: boolean;
+    private loading: boolean = true;
 
     public async created(): Promise<void> {}
 }

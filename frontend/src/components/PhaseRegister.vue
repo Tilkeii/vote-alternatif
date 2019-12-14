@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!loading">
         <v-row>
             <h1>PhaseRegister</h1>
         </v-row>
@@ -34,11 +34,15 @@ export default class PhaseRegister extends Vue {
     @Prop() metamaskAddress!: string;
     @Prop() isOwner!: boolean;
     private candidatesList: Array<any> = [];
+    private loading: boolean = true;
 
     public async created(): Promise<void> {
+        this.loading = true;
+        this.$emit('loading', true);
         this.candidatesList = await this.getCandidatesListContract();
         console.debug("Candidates List : ", this.candidatesList);
-
+        this.loading = false;
+        this.$emit('loading', false);
         /**
          * Web3 event
          */
@@ -62,7 +66,7 @@ export default class PhaseRegister extends Vue {
         });
     }
 
-    private async getCandidatesListContract() {
+    private async getCandidatesListContract(): Promise<any> {
         return await this.$contract.methods
             .getCandidatesList()
             .call({ from: this.metamaskAddress });

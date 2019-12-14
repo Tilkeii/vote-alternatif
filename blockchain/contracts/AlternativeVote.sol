@@ -65,7 +65,7 @@ contract AlternativeVote is Ownable {
         Son vote est un tableau avec tous les candidats
         classé de son préféré à son pire
      */
-    function giveVotesList(address[] memory _votesList) public onlyOpenPhase {
+    function giveVotesList(address[] memory _votesList) public onlyOpenPhase alreadyVoted {
         _votersAddressMapping[msg.sender] = _votesList;
         _votersAddress.push(msg.sender);
     }
@@ -133,6 +133,14 @@ contract AlternativeVote is Ownable {
         return _currentPhase;
     }
 
+    function getAlreadyVoted () external view returns(bool) {
+        return _votersAddressMapping[msg.sender].length > 0;
+    }
+
+    function getUserVote() external view returns(address[] memory) {
+        return _votersAddressMapping[msg.sender];
+    }
+
     /*********************
     *   PURE FUNCTIONS   *
     *********************/
@@ -160,6 +168,11 @@ contract AlternativeVote is Ownable {
 
     modifier onlyOpenPhase() {
         require(_currentPhase == Phase.OPEN, "Current phase is not Open");
+        _;
+    }
+
+    modifier alreadyVoted() {
+        require(!(_votersAddressMapping[msg.sender].length > 0), "Already voted");
         _;
     }
 }

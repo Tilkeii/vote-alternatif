@@ -8,7 +8,8 @@
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <v-btn text @click="resetVoteToDefaultContract" v-if="isOwnerProp">Reset Vote</v-btn>
-                <v-btn text @click="setCurrentPhaseContract" v-if="isOwnerProp">Close Vote</v-btn>
+                <v-btn text @click="setCurrentPhaseContract(1)" v-if="isOwnerProp">Close Register</v-btn>
+                <v-btn text @click="setCurrentPhaseContract(2)" v-if="isOwnerProp">Close Vote</v-btn>
                 <v-btn text v-if="isOwnerProp">Get Winner</v-btn>
             </v-toolbar-items>
         </v-app-bar>
@@ -20,19 +21,23 @@
                 <!-- If using vue-router -->
                 <!-- <router-view></router-view> -->
                 <!-- <h1>Vote</h1> -->
+                <v-overlay :value="loading">
+                    <v-progress-circular indeterminate size="64"></v-progress-circular>
+                </v-overlay>
                 <v-row align="center" justify="center">
                     <v-col cols="6">
                         <MetamaskError v-if="!metamaskEnable"></MetamaskError>
-                        <div v-else-if="loading">Loading...</div>
                         <PhaseRegister
                             v-else-if="currentPhase == 0"
                             :metamaskAddress="metamaskAddress"
                             :isOwner="isOwnerProp"
+                            @loading="isLoading"
                         ></PhaseRegister>
                         <PhaseOpen
                             v-else-if="currentPhase == 1"
                             :metamaskAddress="metamaskAddress"
                             :isOwner="isOwnerProp"
+                            @loading="isLoading"
                         ></PhaseOpen>
                         <PhaseClosed
                             v-else-if="currentPhase == 2"
@@ -103,7 +108,12 @@ export default class App extends Vue {
             if (accounts[0]) this.metamaskEnable = true;
             else this.metamaskEnable = false;
             this.isOwnerProp = await this.isOwnerContract();
-            console.debug("New address", this.metamaskAddress, " ; Is Owner : ", this.isOwnerProp);
+            console.debug(
+                "New address",
+                this.metamaskAddress,
+                " ; Is Owner : ",
+                this.isOwnerProp
+            );
         });
 
         /**
@@ -138,10 +148,15 @@ export default class App extends Vue {
             .send({ from: this.metamaskAddress });
     }
 
-    private async setCurrentPhaseContract(): Promise<any> {
+    private async setCurrentPhaseContract(phase: number): Promise<any> {
         return await this.$contract.methods
-            .setCurrentPhase(1)
+            .setCurrentPhase(phase)
             .send({ from: this.metamaskAddress });
+    }
+
+    private isLoading(isLoading: boolean): void {
+        console.log("Loading", isLoading);
+        this.loading = isLoading;
     }
 }
 
