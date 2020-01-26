@@ -86,16 +86,34 @@ contract AlternativeVote is Ownable {
         emit ResetVote();
     }
 
+    /*
     //calcule les résultats
     function processVotersAddressMapping() public onlyOwner {
         uint roundNumber = _candidatesList.length - 1;
-
+        //mapping candidate adress avec son nombre de vote
+        mapping(address => int) private _candidatesCountMapping; 
         for(uint round = 0; round < roundNumber; round++) {
+            // reinitialiser _candidatesCountMapping à 0
+            // ...
             for(uint voter = 0; voter < _votersAddress.length; voter++) {
-
+                for(uint cand = 0; candidate < _candidatesList.length; cand++){
+                    //si le candidat est le premier du voter, son count incremente
+                    if (_candidatesList[cand] == _votersAddressMapping[voter][0]){
+                        _candidatesCountMapping[_candidatesList[cand]] += 1
+                    }
+                        candidate_count = _candidatesCountMapping[_candidatesList[cand]]
+                        //cherche le moins premier
+                        for (uint i = 0; i < _candidatesCountMapping.length; i++){
+                            if (_candidatesCountMapping[i] > candidate_count){ 
+                                least_first = _candidatesList[cand];
+                            }
+                        }
+                }    
             }
+            // remove le least_first de la liste candidats
         }
     }
+    */
 
     // function setArrayForNextRound(uint[] storage array) internal returns(uint[] memory) {
     //     for(uint i = 0; i < array.length - 1; i++){
