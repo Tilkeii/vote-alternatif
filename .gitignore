@@ -1,2 +1,6 @@
+frontend/node_modules
+blockchain/node_modules
+blockchain/build
+blockchain/.secret
 .ionide/
 bin/
